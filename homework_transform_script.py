@@ -1,10 +1,16 @@
 import pandas as pd
 import numpy as np
+import json
 from gcp_functions import read_csv_from_gcs, upload_table_to_bq
 
-YOUR_BUCKET_NAME = "mudassir-cis9440-hw"
-PROJECT_ID = 'dw-group-project'
+## get GCP configurations
+with open('config.json') as config_file:
+    config = json.load(config_file)
 
+YOUR_BUCKET_NAME = config["bucket_name"]
+PROJECT_ID = config["project_id"]
+
+## begin data cleaning and transformation
 crime_df_raw = read_csv_from_gcs(bucket_name=YOUR_BUCKET_NAME, file_name='2024-04-08/crime_data_20240408172539.csv')
 crime_df_raw.drop_duplicates(subset=['dr_no'], inplace=True)
 
