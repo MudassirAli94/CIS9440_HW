@@ -1,0 +1,8 @@
+google-cloud-storage
+google-cloud-bigquery
+pandas
+pandas-gbq
+matplotlib
+scikit-learn
+numpy
+requests
