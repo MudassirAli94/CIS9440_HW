@@ -14,20 +14,7 @@ columns_to_drop = missing_percentages[missing_percentages > 25].index
 
 crime_df = crime_df_raw.drop(columns=columns_to_drop).copy()
 #formatting time columns
-crime_df["time_rptd"] = crime_df.date_rptd.apply(lambda i:str(i).split("T")[-1])
-crime_df["time_rptd"] = crime_df["time_rptd"].apply(lambda i: str(i).split(".")[0])
-crime_df["time_rptd"] = crime_df["time_rptd"].apply(lambda i: str(i).replace(":",""))
-crime_df["time_rptd"] = crime_df["time_rptd"].astype(str)
-
-crime_df["time_occ"] = crime_df.time_occ.apply(lambda i:str(i).split(".")[0])
-
-
-print("Is the time occurred all 000000?", len(crime_df[crime_df["time_occ"] == "000000"]) == len(crime_df))
-print()
-print("Is the time reported all 000000?", len(crime_df[crime_df["time_rptd"] == "000000"]) == len(crime_df))
-print()
-
-#crime_df.drop(columns=["time_occ", "time_rptd"], inplace=True)
+crime_df["time_occ"] = crime_df.time_occ.apply(lambda i:str(i).split(".")[-1])
 
 #formatting date columns
 crime_df["date_rptd"] = crime_df.date_rptd.apply(lambda i:str(i).split("T")[0])
