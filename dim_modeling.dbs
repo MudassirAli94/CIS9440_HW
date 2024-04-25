@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="la_crime" id="GoogleBigQuery-18ae" database="GoogleBigQuery" >
+	<schema name="la_crime" >
+		<table name="crime_facts" prior="Tbl" >
+			<column name="dr_no" type="int64" jt="4" >
+				<comment><![CDATA[primary key for facts table]]></comment>
+			</column>
+			<column name="crime_cd" prior="crm_cd" type="int64" jt="4" >
+				<comment><![CDATA[crime code, FK for dim crime]]></comment>
+			</column>
+			<column name="premis_cd" type="numeric" jt="2" >
+				<comment><![CDATA[premise code, FK for dim_premis]]></comment>
+			</column>
+			<column name="weapon_cd" type="numeric" jt="2" >
+				<comment><![CDATA[weapon code, FK for dim_weapon]]></comment>
+			</column>
+			<column name="area_cd" type="int64" jt="4" >
+				<comment><![CDATA[area code, FK for dim_area]]></comment>
+			</column>
+			<column name="date_occ" type="int64" jt="4" >
+				<comment><![CDATA[date occured of the crime, FK for dim_date table]]></comment>
+			</column>
+			<column name="status_desc" type="string" jt="12" />
+			<column name="vict_age" type="int64" jt="4" >
+				<comment><![CDATA[age of victim]]></comment>
+			</column>
+			<column name="vict_sex" type="string" jt="12" >
+				<comment><![CDATA[sex of victim]]></comment>
+			</column>
+			<column name="vict_descent" type="string" jt="12" >
+				<comment><![CDATA[Descent of victim]]></comment>
+			</column>
+			<fk name="weapon_cd" to_schema="la_crime" to_table="dim_weapon" >
+				<fk_column name="weapon_cd" pk="weapon_cd" />
+			</fk>
+			<fk name="area_cd" to_schema="la_crime" to_table="dim_area" >
+				<fk_column name="area_cd" pk="area_cd" />
+			</fk>
+			<fk name="crime_cd" to_schema="la_crime" to_table="dim_crime" >
+				<fk_column name="crime_cd" pk="crime_cd" />
+			</fk>
+			<fk name="premis_cd" to_schema="la_crime" to_table="dim_premis" >
+				<fk_column name="premis_cd" pk="premis_cd" />
+			</fk>
+			<fk name="date_occ" to_schema="la_crime" to_table="dim_date" >
+				<fk_column name="date_occ" pk="date_occ" />
+			</fk>
+		</table>
+		<table name="dim_area" prior="Tbl" >
+			<column name="area_cd" type="int64" jt="4" mandatory="y" >
+				<comment><![CDATA[area code, FK to facts table]]></comment>
+			</column>
+			<column name="area_desc" type="string" jt="12" >
+				<comment><![CDATA[description of area]]></comment>
+			</column>
+			<index name="pk_dim_area" unique="PRIMARY_KEY" >
+				<column name="area_cd" />
+			</index>
+		</table>
+		<table name="dim_crime" prior="Tbl" >
+			<comment><![CDATA[dimension table for crime]]></comment>
+			<column name="crime_cd" type="int64" jt="4" mandatory="y" />
+			<column name="crime_desc" type="string" jt="12" >
+				<comment><![CDATA[description of crime]]></comment>
+			</column>
+			<index name="pk_dim_crime" unique="PRIMARY_KEY" >
+				<column name="crime_cd" />
+			</index>
+		</table>
+		<table name="dim_date" prior="Tbl" >
+			<comment><![CDATA[dimension date table]]></comment>
+			<column name="date_occ" type="int64" jt="4" mandatory="y" >
+				<comment><![CDATA[date occured, FK to facts table]]></comment>
+			</column>
+			<column name="date_rptd" type="int64" jt="4" >
+				<comment><![CDATA[date reported]]></comment>
+			</column>
+			<column name="year" type="int64" jt="4" >
+				<comment><![CDATA[the year the crime occured]]></comment>
+			</column>
+			<column name="month" type="int64" jt="4" >
+				<comment><![CDATA[integer month the crime happened]]></comment>
+			</column>
+			<column name="month_name" type="string" jt="12" >
+				<comment><![CDATA[name of the month]]></comment>
+			</column>
+			<column name="day" type="int64" jt="4" >
+				<comment><![CDATA[integer day of the month]]></comment>
+			</column>
+			<column name="day_of_week" type="string" jt="12" >
+				<comment><![CDATA[day the crime happened]]></comment>
+			</column>
+			<column name="time_occ" type="string" jt="12" >
+				<comment><![CDATA[time the crime happened]]></comment>
+			</column>
+			<column name="hour" type="int64" jt="4" >
+				<comment><![CDATA[hour the crime happened]]></comment>
+			</column>
+			<column name="minute" type="int64" jt="4" >
+				<comment><![CDATA[the minute the crime happened]]></comment>
+			</column>
+			<column name="calendar_year_quarter" type="int64" jt="4" >
+				<comment><![CDATA[integer quarter the crime happened]]></comment>
+			</column>
+			<index name="pk_dim_date" unique="PRIMARY_KEY" >
+				<column name="date_occ" />
+			</index>
+		</table>
+		<table name="dim_premis" prior="Tbldkim_premis" >
+			<column name="premis_cd" type="numeric" jt="2" mandatory="y" >
+				<comment><![CDATA[premise code, FK to facts table]]></comment>
+			</column>
+			<column name="premis_desc" type="string" jt="12" />
+			<index name="pk_dim_premis" unique="PRIMARY_KEY" >
+				<column name="premis_cd" />
+			</index>
+		</table>
+		<table name="dim_weapon" prior="Tbl" >
+			<comment><![CDATA[Dimension table for weapon]]></comment>
+			<column name="weapon_cd" type="numeric" jt="2" mandatory="y" >
+				<comment><![CDATA[weapon code, FK to facts table]]></comment>
+			</column>
+			<column name="weapon_desc" type="string" jt="12" >
+				<comment><![CDATA[description of weapon]]></comment>
+			</column>
+			<index name="pk_dim_weapon" unique="PRIMARY_KEY" >
+				<column name="weapon_cd" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-877" show_relation="columns" >
+		<entity schema="la_crime" name="crime_facts" color="C1D8EE" x="720" y="400" />
+		<entity schema="la_crime" name="dim_area" color="C1D8EE" x="960" y="496" />
+		<entity schema="la_crime" name="dim_crime" color="C1D8EE" x="720" y="720" />
+		<entity schema="la_crime" name="dim_date" color="C1D8EE" x="672" y="48" />
+		<entity schema="la_crime" name="dim_premis" color="C1D8EE" x="432" y="528" />
+		<entity schema="la_crime" name="dim_weapon" color="C1D8EE" x="464" y="368" />
+		<callout x="48" y="64" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Right-click the layout to create new tables. 
+- Double-click table headers to edit. 
+- For a better understanding of the schema, create multiple layouts.
+- Save the design to the model file, and deploy from 'Schema / Create into the database'.]]></comment>
+		</callout>
+	</layout>
+</project>
