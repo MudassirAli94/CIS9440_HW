@@ -6,10 +6,7 @@ from io import StringIO
 from google.oauth2 import service_account
 import pandas_gbq
 import json
-
-from google.cloud import storage
-from datetime import datetime
-import pandas as pd
+from pandas_gbq import to_gbq
 
 def upload_dataframe_to_gcs(bucket_name, df, file_name, project_id):
     now = datetime.now()
@@ -19,7 +16,7 @@ def upload_dataframe_to_gcs(bucket_name, df, file_name, project_id):
     destination_folder = f"{formatted_date}"
 
     formatted_time = now.strftime("%Y%m%d%H%M%S")
-    file_name = f"crime_data_{formatted_time}.csv"
+    file_name = f"{file_name}_{formatted_time}.csv"
 
     csv_string = df.to_csv(index=False)
 
@@ -30,7 +27,6 @@ def upload_dataframe_to_gcs(bucket_name, df, file_name, project_id):
     blob.upload_from_string(csv_string, content_type='text/csv')
 
     print(f"DataFrame uploaded to {bucket_name}/{destination_folder}/{file_name}.")
-
 
 def read_csv_from_gcs(bucket_name, file_name):
     storage_client = storage.Client()
@@ -78,3 +74,44 @@ def read_table_from_bq(query,project_id):
     # Read the data from BigQuery into a pandas DataFrame
     df = pandas_gbq.read_gbq(query, project_id=project_id, credentials=credentials)
     return df
+
+
+def insert_dataframe_to_bigquery(df, dataset_table_name, project_id, if_exists='replace'):
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+
+    key_path = config['key_path']
+    credentials = service_account.Credentials.from_service_account_file(key_path)
+    full_table_name = f'{project_id}.{dataset_table_name}'
+    to_gbq(df, full_table_name, project_id=project_id, if_exists=if_exists, credentials=credentials)
+
+def create_bigquery_schema(sql_file_path):
+
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+
+    key_path = config['key_path']
+
+    # Construct a BigQuery client object.
+    credentials = service_account.Credentials.from_service_account_file(
+        key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+
+    client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+
+    # Path to your SQL file
+
+    # Read your SQL file
+    with open(sql_file_path, 'r') as file:
+        sql_commands = file.read().split(';')  # Assuming your commands are separated by ';'
+
+    # Execute each command from the SQL file
+    for command in sql_commands:
+        if command.strip() == "":
+            continue  # Skipping empty commands
+        print(f"Executing command: {command}")
+        # Run a query job
+        query_job = client.query(command)
+        query_job.result()  # Wait for the job to complete
+
+    print("Schema creation is complete.")
