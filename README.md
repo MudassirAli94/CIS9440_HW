@@ -6,6 +6,8 @@ This data comes from https://data.lacity.org/Public-Safety/Crime-Data-from-2020-
 
 ## Data Dictionary
 
+This is the raw data dictionary from the source website. In the files section above is the relevant data dictionary for the table columns I used for the data warehousing.
+
 Raw Data dictionary: https://data.lacity.org/Public-Safety/Crime-Data-from-2020-to-Present/2nrs-mtv8/about_data
 
 ## Information Archeticture:
