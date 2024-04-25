@@ -60,19 +60,23 @@ crime_df = crime_df.rename(columns = {"area":"area_cd","crm_cd_desc":"crm_desc",
 ## area dimension
 
 area_df = crime_df[['area_cd', 'area_name']].drop_duplicates().copy()
+area_df.drop_duplicates(subset=['area_cd'], inplace=True)
 
 ## crime type dimension
 
 crime_type_df = crime_df[['crm_cd', 'crm_desc']].drop_duplicates().copy()
 crime_type_df = crime_type_df.rename(columns = {"crm_cd":"crime_cd", "crm_desc":"crime_desc"})
+crime_type_df.drop_duplicates(subset=['crime_cd'], inplace=True)
 
 ## premise dimension
 
 premise_df = crime_df[['premis_cd', 'premis_desc']].drop_duplicates().copy()
+premise_df.drop_duplicates(subset=['premis_cd'], inplace=True)
 
 ## weapon dimension
 
 weapon_df = crime_df[['weapon_cd', 'weapon_desc']].drop_duplicates().copy()
+weapon_df.drop_duplicates(subset=['weapon_cd'], inplace=True)
 
 ## date time dimension
 
@@ -134,12 +138,12 @@ insert_dataframe_to_bigquery(weapon_df, 'la_crime.dim_weapon', credentials.proje
 print("Finished inserting weapon dimension")
 print()
 
-insert_dataframe_to_bigquery(date_time_df, 'la_crime.dim_date_time', credentials.project_id)
+insert_dataframe_to_bigquery(date_time_df, 'la_crime.dim_date', credentials.project_id)
 
 print("Finished inserting date time dimension")
 print()
 
-insert_dataframe_to_bigquery(fact_df, 'la_crime.la_crime_facts', credentials.project_id, if_exists='append')
+insert_dataframe_to_bigquery(fact_df, 'la_crime.crime_facts', credentials.project_id, if_exists='append')
 
 print("Finished inserting fact table")
 print()
