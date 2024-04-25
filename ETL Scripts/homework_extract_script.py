@@ -2,9 +2,13 @@ import pandas as pd
 import requests
 from gcp_functions import upload_dataframe_to_gcs
 from tqdm import tqdm
+import json
 
-YOUR_BUCKET_NAME = "mudassir-cis9440-hw"
-PROJECT_ID = 'dw-group-project'
+with open('config.json') as config_file:
+    config = json.load(config_file)
+
+YOUR_BUCKET_NAME = config["bucket_name"]
+PROJECT_ID = config["project_id"]
 
 url = "https://data.lacity.org/resource/2nrs-mtv8.csv"
 api_limit = 1000
