@@ -19,3 +19,10 @@ Raw Data dictionary: https://data.lacity.org/Public-Safety/Crime-Data-from-2020-
 
 
 ![image](https://github.com/MudassirAli94/CIS9440_HW/assets/38592433/1dca0e7b-26c9-4a0e-8aba-c2a1238d01c4)
+
+## Analysis:
+
+![image](https://github.com/MudassirAli94/CIS9440_HW/assets/38592433/f4675d07-157a-410a-a1ef-9b70da14c004)
+
+A screenshot of the powerBI one page dashboard (also availble above): on a first glance we can see the crime rate spiked from 2021 to 2022 and Hispanic race were the victim of most of the crimes. Additionally the Male and Female victim ratio is just about split at 50-50 with Men having a slight edge. Please see the full pbix file in the files section for a deeper drilldown.
+
