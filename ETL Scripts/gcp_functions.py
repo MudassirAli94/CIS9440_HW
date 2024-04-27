@@ -28,8 +28,8 @@ def upload_dataframe_to_gcs(bucket_name, df, file_name, project_id):
 
     print(f"DataFrame uploaded to {bucket_name}/{destination_folder}/{file_name}.")
 
-def read_csv_from_gcs(bucket_name, file_name):
-    storage_client = storage.Client()
+def read_csv_from_gcs(project_id,bucket_name, file_name):
+    storage_client = storage.Client(project=project_id)
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(file_name)
     data = blob.download_as_text()
